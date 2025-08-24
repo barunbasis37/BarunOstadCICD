@@ -81,10 +81,10 @@ jobs:
           pm2 status
 
           #delete node-App
-          pm2 delete node-App || true
+          pm2 delete Node-App-CICD || true
 
           #create node-App
-          pm2 start "npm start" --name "node-app" 
+          pm2 start "npm start" --name "Node-App-CICD" 
 
           #Save the Process PM2
           pm2 save 
