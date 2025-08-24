@@ -52,8 +52,4 @@ jobs:
 
           #Save the Process PM2
           pm2 save 
-      
-      
-      - name: Deploy to Production
-        run: echo "Deploying to production server..."
-        # Add your deployment commands here, e.g., scp, rsync, etc.        
+             
