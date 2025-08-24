@@ -53,7 +53,7 @@ jobs:
         run: npm run check            
 
   deploy:
-    needs: test
+    needs: build
     runs-on: self-hosted
     steps:
       - name: Checkout the repo code
