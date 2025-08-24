@@ -22,4 +22,38 @@ jobs:
         run: npm install
       
       - name: Run tests
-        run: npm run check      
+        run: npm run check    
+
+  deploy:
+    needs: test
+    runs-on: self-hosted
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Checkout the repo code
+        uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+      
+      - name: Install dependencies
+        run: npm install
+      - name: Run the Application By PM2
+        run: |
+          ls -a
+          pm2 status
+
+          #delete node-App
+          pm2 delete node-App || true
+
+          #create node-App
+          pm2 start "npm start" --name "node-app" 
+
+          #Save the Process PM2
+          pm2 save 
+      
+      
+      - name: Deploy to Production
+        run: echo "Deploying to production server..."
+        # Add your deployment commands here, e.g., scp, rsync, etc.        
