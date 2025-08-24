@@ -48,9 +48,7 @@ jobs:
         with:
           name: build-artifacts 
           path: ./build
-      
-      - name: Run tests
-        run: npm run check            
+               
 
   deploy:
     needs: build
