@@ -22,7 +22,34 @@ jobs:
         run: npm install
       
       - name: Run tests
-        run: npm run check    
+        run: npm run check  
+
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo code
+        uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+      
+      - name: Install packages
+        run: |
+          mkdir build
+          cd build
+          echo "This is a build step" > hello.txt
+      
+      - name: Upload the artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts 
+          path: ./build
+      
+      - name: Run tests
+        run: npm run check            
 
   deploy:
     needs: test
@@ -31,6 +58,17 @@ jobs:
       - name: Checkout the repo code
         uses: actions/checkout@v3    
       
+      - name : Download the artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: ./build
+
+      -name: Show the list of files
+        run: |
+            ls -a
+
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -41,7 +79,15 @@ jobs:
 
       - name: Install PM2
         run: npm install pm2 -g
-          
+
+      - name: Install Nginx
+        run: |
+          sudo apt update
+          sudo apt install nginx -y
+          sudo systemctl start nginx
+          sudo systemctl enable nginx
+
+
       - name: Run the Application By PM2
         run: |
           ls -a
